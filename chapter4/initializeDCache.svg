@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="103.23277mm"
+   height="36.470535mm"
+   viewBox="0 0 103.23277 36.470535"
+   version="1.1"
+   id="svg275"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="initializeDCache.svg">
+  <defs
+     id="defs269" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="27.226539"
+     inkscape:cy="-62.040292"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1046"
+     inkscape:window-x="0"
+     inkscape:window-y="34"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata272">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-76.13957,-33.836162)">
+    <text
+       id="text87"
+       style="font-variant:normal;font-size:3.16441679px;font-family:Courier;-inkscape-font-specification:Courier-8r-0-1000-77;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.35277775"
+       x="75.851608"
+       y="36.057583">
+      <tspan
+         style="stroke-width:0.35277775"
+         id="tspan69"
+         sodipodi:role="line"
+         y="36.057583"
+         x="75.851608 77.750259 81.547554 83.446205 85.344856 87.243507 89.142151 92.939453 94.838104 96.736755 100.53406 102.43271 104.33136 106.23 110.02731 111.92596">/*clearalltags*/</tspan>
+      <tspan
+         style="stroke-width:0.35277775"
+         id="tspan71"
+         sodipodi:role="line"
+         y="40.276699"
+         x="75.851608 77.750259 79.648911 83.446205 85.344856 87.243507 89.142151 91.040802 94.838104 98.635406 100.53406 102.43271 104.33136 106.23 108.12865 111.92596 113.82461 115.72325 117.6219 121.4192 125.21651 127.11516 129.01381 130.91246 132.81111 136.60841 140.40572 142.30435 144.203 146.10165 148.00031 151.79761 153.69626 155.59491 157.49356 161.29086 163.1895 166.98682 168.88545 170.78412 172.68275 174.58141 176.48006 178.37871">for(addr=KSEG0;addr&lt;KSEG0+size;addr+=lnsize)</tspan>
+      <tspan
+         style="stroke-width:0.35277775"
+         id="tspan73"
+         sodipodi:role="line"
+         y="44.495815"
+         x="83.443359 85.34201 87.240662 89.139305 91.037956 92.936607 94.835258 96.733902 98.632561 100.53121 102.42986 104.32851 106.22716 108.12581 110.02446 111.9231 113.82175 117.61906 119.51771 121.41636 123.31501 125.21366 127.1123 129.01096">Index_Store_Tag_D(addr);</tspan>
+      <tspan
+         style="stroke-width:0.35277775"
+         id="tspan75"
+         sodipodi:role="line"
+         y="48.714928"
+         x="75.851608 77.750259 81.547554 83.446205 85.344856 87.243507 91.040802 92.939453 94.838104 96.736755 100.53406 102.43271 104.33136 106.23 110.02731 111.92596 113.82461 115.72325 119.52056 121.4192 123.31786 127.11516 129.01381 130.91246 132.81111 134.70975 136.60841 140.40572 142.30435 144.203 146.10165 148.00031 149.89896 153.69626 155.59491">/*loadfromeachline(incachedspace)*/</tspan>
+      <tspan
+         style="stroke-width:0.35277775"
+         id="tspan77"
+         sodipodi:role="line"
+         y="52.933727"
+         x="75.851608 77.750259 79.648911 83.446205 85.344856 87.243507 89.142151 91.040802 94.838104 98.635406 100.53406 102.43271 104.33136 106.23 108.12865 111.92596 113.82461 115.72325 117.6219 121.4192 125.21651 127.11516 129.01381 130.91246 132.81111 136.60841 140.40572 142.30435 144.203 146.10165 148.00031 151.79761 153.69626 155.59491 157.49356 161.29086 163.1895 166.98682 168.88545 170.78412 172.68275 174.58141 176.48006 178.37871">for(addr=KSEG0;addr&lt;KSEG0+size;addr+=lnsize)</tspan>
+      <tspan
+         style="stroke-width:0.35277775"
+         id="tspan79"
+         sodipodi:role="line"
+         y="57.152847"
+         x="83.443359 85.34201 87.240662 89.139305 92.936607 96.733902 98.632561 100.53121 102.42986 104.32851 106.22716">junk=*addr;</tspan>
+      <tspan
+         style="stroke-width:0.35277775"
+         id="tspan81"
+         sodipodi:role="line"
+         y="61.37196"
+         x="75.851608 77.750259 81.547554 83.446205 85.344856 87.243507 89.142151 92.939453 94.838104 96.736755 100.53406 102.43271 104.33136 106.23 110.02731 111.92596">/*clearalltags*/</tspan>
+      <tspan
+         style="stroke-width:0.35277775"
+         id="tspan83"
+         sodipodi:role="line"
+         y="65.590759"
+         x="75.851608 77.750259 79.648911 83.446205 85.344856 87.243507 89.142151 91.040802 94.838104 98.635406 100.53406 102.43271 104.33136 106.23 108.12865 111.92596 113.82461 115.72325 117.6219 121.4192 125.21651 127.11516 129.01381 130.91246 132.81111 136.60841 140.40572 142.30435 144.203 146.10165 148.00031 151.79761 153.69626 155.59491 157.49356 161.29086 163.1895 166.98682 168.88545 170.78412 172.68275 174.58141 176.48006 178.37871">for(addr=KSEG0;addr&lt;KSEG0+size;addr+=lnsize)</tspan>
+      <tspan
+         style="stroke-width:0.35277775"
+         id="tspan85"
+         sodipodi:role="line"
+         y="69.809883"
+         x="83.443359 85.34201 87.240662 89.139305 91.037956 92.936607 94.835258 96.733902 98.632561 100.53121 102.42986 104.32851 106.22716 108.12581 110.02446 111.9231 113.82175 117.61906 119.51771 121.41636 123.31501 125.21366 127.1123 129.01096">Index_Store_Tag_D(addr);</tspan>
+    </text>
+  </g>
+</svg>
