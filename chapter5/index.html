@@ -1,0 +1,415 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>异常，中断和....</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/league.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+	</head>
+
+	<body>
+
+		<div class="reveal">
+			<div class="slides">
+
+          <section data-markdown> 
+            <script type="text/template">
+              <!-- .slide: data-background="#f2c335" -->
+              ## Interrupt in MIPS
+
+              - What is interrupt and exception <!-- .element: class="fragment" data-fragment-index="1" -->
+              - Interrupt in Linux <!-- .element: class="fragment" data-fragment-index="2" -->
+              - How to support the software <!-- .element: class="fragment" data-fragment-index="3" -->
+                - Interrupts and Exception  with pipeline <!-- .element: class="fragment" data-fragment-index="4" -->
+                - Exception <!-- .element: class="fragment" data-fragment-index="5" -->
+                - Interrupt <!-- .element: class="fragment" data-fragment-index="6" -->
+            </script>
+          </section>
+
+          <section data-markdown> 
+            <script type="text/template">
+              <!-- .slide: data-background="#10b3e5" -->
+              # Why we need interrupt and exception
+            </script>
+          </section>
+
+
+
+          <section>
+              <section data-markdown> 
+                <script type="text/template">
+                  <!-- .slide: data-background="#e55010" -->
+                  # What is Interrupt and Exception
+                </script>
+              </section>
+
+              <section data-markdown> 
+                <script type="text/template">
+                  <!-- .slide: data-background="#e55010" -->
+                  ## What is Interrupt and Exception
+
+                  中断　异常　自陷.....<!-- .element: class="fragment" data-fragment-index="1" -->
+
+                  Interrupt exception fault trap  system calls ......<!-- .element: class="fragment" data-fragment-index="2" -->
+
+                  In the MIPS architecture interrupts, traps, system calls, and everything else that can disrupt the normal flow of execution are called exceptions<!-- .element: class="fragment" data-fragment-index="3" -->
+                </script>
+              </section>
+
+              <section data-markdown> 
+                <script type="text/template">
+                  <!-- .slide: data-background="#e55010" -->
+                  ## What is Interrupt and Exception
+                  1. External events
+                  1. Memory translation exceptions
+                  2. Other unusual program conditions for the kernel to fix
+                  3. Program or hardware-detected errors 
+                  4. Data integrity problems
+                  5. System calls and traps
+                </script>
+              </section>
+
+              <section data-markdown> 
+                <script type="text/template">
+                  <!-- .slide: data-background="#e55010" -->
+                  ## What is Interrupt and Exception
+
+                  || synchronous|asynchronous|
+                  |:---:        |:----:|:----:|
+                  |  产生部位   |  CPU控制单元  |  外部设备 计时器等 |
+                  |  产生时间   |  指令间  |  指令中 |
+                  | intel标准名称| exception(maskable exception & nonmaskable exception)     |  interrupt(fault trap abort)    |
+
+                </script>
+              </section>
+          </section>
+
+
+          <section>
+              <section data-markdown> 
+                <script type="text/template">
+                  <!-- .slide: data-background="#98a5ba" -->
+                  # Interrupt in Linux
+                </script>
+              </section>
+
+              <section data-markdown> 
+                <script type="text/template">
+                  <!-- .slide: data-background="#98a5ba" -->
+                  <font size="5">
+                  An interrupt is physically produced by electronic signals originating from hardware
+                  devices and directed into input pins on an interrupt controller, a simple chip that multi
+                  plexes
+                  </font>
+                  _multiple interrupt lines into a **single** line_
+                  <font size="5">
+                  to the processor
+                  </font>
+                </script>
+              </section>
+
+              <section data-markdown> 
+                <script type="text/template">
+                  <!-- .slide: data-background="#98a5ba" -->
+                  ```
+                  int request_irq(unsigned int irq, irq_handler_t handler, unsigned long flags, const char *name, void *dev)　/* 注册irq*/
+
+                  static irqreturn_t intr_handler(int irq, void *dev) /* 执行irq */
+
+                  unsigned int do_IRQ(struct pt_regs regs) /* 检查当前环境是否可以开始中断 */
+
+                  irqreturn_t handle_IRQ_event(unsigned int irq, struct irqaction *action) /*　执行中断 */
+
+                  void local_irq_disable(); /* interrupts are disabled .. */
+                  void local_irq_enable(); /* interrupts are enabled .. */
+
+                  /**
+                    * enable and disable irq line
+                    */
+                  void disable_irq(unsigned int irq);
+                  void disable_irq_nosync(unsigned int irq);
+                  void enable_irq(unsigned int irq);
+                  void synchronize_irq(unsigned int irq);
+                  ```
+                </script>
+              </section>
+
+              <section data-markdown> 
+                <script type="text/template">
+                  <!-- .slide: data-background="#98a5ba" -->
+                  1. softirqs
+                  2. takslet
+                  3. work queue
+                </script>
+              </section>
+
+
+          </section>
+
+
+
+
+        <section>
+          <section data-markdown> 
+              <script type="text/template">
+                <!-- .slide: data-background="#6897a5" -->
+                # Precise Exceptions
+                <!-- 为什么需要Precise Exception -->
+                > 1. It’s as if the exception victim and any successors were never started
+                > 2. All instructions preceding the exception victim in execution sequence are complete 
+              </script>
+          </section>
+
+          <section data-markdown> 
+              <script type="text/template">
+                <!-- .slide: data-background="#6897a5" -->
+                ### How to implement it
+                <!-- 实现Precise Exception 需要做到什么 -->
+                1. **Cause(BD)** for branch delay slot
+                2. one particular pipeline stage to detect exceptions
+                3. clear the pipeline
+              </script>
+          </section>
+
+          <section data-markdown> 
+              <script type="text/template">
+                <!-- .slide: data-background="#6897a5" -->
+                ### Example
+                <!-- 错误的典范 -->
+                ```
+                mflo $8 /* wait to get result */
+                mult $9, $10 /* second mul instruction*/
+                ```
+                <!-- .element: class="fragment" data-fragment-index="1" -->
+
+                > multiply/divide operations are unstoppable
+
+                <!-- .element: class="fragment" data-fragment-index="2" -->
+              </script>
+          </section>
+        </section>
+
+
+        <section>
+          <section data-markdown> 
+              <script type="text/template">
+                <!-- .slide: data-background="#4fd6a0" -->
+                # Exception
+                1. Exception vector
+                2. Exception handler routine
+                3. Nesting Exceptions
+              </script>
+          </section>
+
+          <section data-markdown> 
+              <script type="text/template">
+                <!-- .slide: data-background="#4fd6a0" -->
+                ### Interrupt vector
+                <font size="5">
+                Most **CISC** processors have **hardware (or concealed microcode)** that analyzes an
+                exception, dispatching the CPU to different entry points according to what kind
+                of exception happened. When even interrupts are handled at different entry
+                points according to the interrupt input signal(s) activated, that’s called vectored
+                interrupts
+                </font> 
+                <!-- .element: class="fragment fade-out" data-fragment-index="2" -->
+
+              </script>
+          </section>
+
+          <section data-markdown> 
+              <script type="text/template">
+                <!-- .slide: data-background="#4fd6a0" -->
+                ### Exception handler routine
+                1. Bootstrapping
+                  - <font size="5">**k0** and **k1** get room</font> 
+                2. Dispatching different exceptions  
+                  - <font size="5"> Consult **Cause(ExcCode)** </font> 
+                3. Constructing the exception processing environment  
+                  - <font size="5"> save the context</font> 
+                4. Processing the exception  
+                5. Preparing to return  
+                  - <font size="5"> restore context && changing SR back </font> 
+                6. Returning from an exception  
+                  - <font size="5"> eret clears the **SR(EXL)** bit and returns control to the address stored in **EPC**</font> 
+              </script>
+          </section>
+
+          <section data-markdown> 
+              <script type="text/template">
+                <!-- .slide: data-background="#4fd6a0" -->
+                ### Nesting Exceptions
+              </script>
+          </section>
+        </section>
+
+        <section>
+          <section data-markdown> 
+              <script type="text/template">
+                <!-- .slide: data-background="#c4096a" -->
+                # Interrupt
+                1. Hardware support for interrupt
+                2. Interrupt priority
+                3. Critical regions, disabling interrupts, and semaphores
+              </script>
+          </section>
+
+          <section data-markdown> 
+              <script type="text/template">
+                <!-- .slide: data-background="#c4096a" -->
+                ### Hardware support for interrupt
+                1. SR
+                  1. SR(IE) <font size="4"> interrupt (service) enable</font>
+                  2. SR(EXL) SR(ERL) <font size="4">  inhibit interrupts if set </font>
+                  3. SR(IM) <font size="4"> interrupt mask </font>
+                2. Cause <font size="4"> indicates which interrupt inputs are currently active </font>
+                  1. Cause(IP) <font size="4"> input </font>
+                  2. Cause(IV) <font size="4"> offer an optional distinct exception entry point reserved for interrupts</font>
+                  3. Cause(ExeCode) <font size="4"> exception type </font>
+                3. k0 k1
+              </script>
+          </section>
+
+          <section data-markdown> 
+              <script type="text/template">
+                <!-- .slide: data-background="#c4096a" -->
+                ### Hardware support for interrupt
+                  |Steps|Action|
+                  |:--:|:--:|
+                  |1|<font size="5">And Cause(IP) with SR(IM) to get requests </font>|
+                  |2|<font size="5">Select one active, enabled interrupt for attention</font>|
+                  |3|<font size="5">Save and mofidify SR(IM)|</font>
+                  |4|<font size="5">save the state (user registers, etc.) </font>|
+                  |5|<font size="5">change your CPU state to that appropriate to the higher-level part of the interrupt handler</font>|
+                  |6|<font size="5">Call your interrupt routine</font>|
+                  |7|<font size="5">disable interrupts again to restore the preinterrupt values of registers</font>|
+              </script>
+          </section>
+
+          <section data-markdown> 
+              <script type="text/template">
+                <!-- .slide: data-background="#c4096a" -->
+                ### Critical regions, disabling interrupts, and semaphores
+                ```
+                mfc0 t0, SR
+                1:
+                or t0, things_to_set
+                and t0, ˜(things_to_clear)
+                2:
+                mtc0 t0, SR
+                ehb
+                ```
+                Suppose we take an interrupt somewhere between label 1 and 2 and that interrupt routine itself causes a change in SR, then when we write our own altered value of SR at label 2, we’ll lose the change made by the interrupt routine
+              </script>
+          </section>
+
+          <section data-markdown> 
+              <script type="text/template">
+                <!-- .slide: data-background="#c4096a" -->
+                ### Critical regions, disabling interrupts, and semaphores
+                ```
+                  wait(sem);
+                  /* do your atomic thing */
+                  signal(sem)
+                ```
+                <font size="5">
+                High-level atomicity ( wait()) is dependent on being able to build low-level atomicity
+                <!-- 显然，如果当进程A 读取得到的结果是Ok,　立刻被打断，然后进程B读取，然后开始执行，切换到A的时候，A会认为自己也是可以读取的 -->
+                </font>
+                <!-- .element: class="fragment" data-fragment-index="1" -->
+
+
+              </script>
+          </section>
+
+          <section data-markdown> 
+              <script type="text/template">
+                <!-- .slide: data-background="#c4096a" -->
+                ### Critical regions, disabling interrupts, and semaphores
+                ```
+                wait:
+                la t0, sem
+                TryAgain:
+                ll t1, 0(t0)
+                bne t1, zero, WaitForSem
+                li t1, 1
+                sc t1, 0(t0) /* 如果检查含有修改mem, t1 设置为0*/
+                beq t1, zero, TryAgain
+                /* got the semaphore... */
+                jr ra
+                ```
+                <font size="5">
+                  cc(store condition) will only write the addressed location if the hardware confirms that there has been no competing access since the last ll(load linked) and will
+                  leave a 1/0 value in a register to indicate success or failure
+                </font>
+                <!-- .element: class="fragment" data-fragment-index="1" -->
+
+              </script>
+          </section>
+
+          <section data-markdown> 
+              <script type="text/template">
+                <!-- .slide: data-background="#c4096a" -->
+                ### Interrupt priority
+                <!-- 好的，列出那三条内容出来吧 -->
+                3. At all times the software maintains a well-defined interrupt priority level (IPL) at which the CPU is running. Every interrupt source is allocated to one of these levels.
+                2. If the CPU is at the lowest IPL, any interrupt is permitted. This is the state in which normal applications run.
+                1. If the CPU is at the highest IPL, then all interrupts are barred
+              </script>
+          </section>
+        </section>
+
+        <section data-markdown data-background-image="./img/image.jpg"> 
+            <script type="text/template">
+              # THE END
+              <img data-src="./img/code.png">
+            </script>
+        </section>
+
+
+
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+<!-- 注释和ppt的注释，难道所有ppt的采用相同的位置存放 -->
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+        slideNumber: true,
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+
+			});
+		</script>
+	</body>
+
+
+
+
+</html>
