@@ -1,0 +1,359 @@
+<!doctype html>
+
+<!--
+  This is a simple example / template impress.js slide show. The goal is to be
+  easier to read for a first timer than the official and very feature rich
+  demo by bartaz (http://bartaz.github.io/impress.js/). It's also a very
+  traditional presentation that looks like slides (square screens with bullet
+  points...), again to make a first timer feel more at home. From this simple
+  presentation you can then go on to more powerful impress.js presentations!
+  
+  This example is hopefully helpful for people that want to create both
+  simple and (eventually) awesome presentations in impress.js and comfortable
+  doing that directly in HTML.
+  
+  By: @henrikingo (Still based on the HTML from bartaz' demo.)  
+    
+-->
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Classic Slides with impress.js | Simple example impress.js slide show | by Henrik Ingo @henrikingo</title>
+    
+    <meta name="description" content="Simple example impress.js slide show" />
+    <meta name="author" content="Henrik Ingo" />
+    <!--        
+        Impress.js doesn't depend on any external stylesheets. It adds all of the styles it needs for the
+        presentation to work. 
+        
+        However, some of the `extras/` modules do come with their own CSS, and we load
+        them here. You can read about each extras module separately in their directory.
+    -->
+    <link rel="stylesheet" href="../../extras/highlight/styles/github.css">
+    <link rel="stylesheet" href="../../extras/mermaid/mermaid.forest.css">
+
+        
+    <!--
+        This file contains styles specific for this example presentation. 
+    -->
+    <link href="css/classic-slides.css" rel="stylesheet" />
+    
+</head>
+
+<!--
+    
+    Body element is used by impress.js to set some useful class names, that will allow you to detect
+    the support and state of the presentation in CSS or other scripts.
+    
+    First very useful class name is `impress-not-supported`. This class means, that browser doesn't
+    support features required by impress.js, so you should apply some fallback styles in your CSS.
+    It's not necessary to add it manually on this element. If the script detects that browser is not
+    good enough it will add this class, but keeping it in HTML means that users without JavaScript
+    will also get fallback styles.
+    
+    When impress.js script detects that browser supports all required features, this class name will
+    be removed.
+    
+    Another class name on body element also depends on currently active presentation step.    
+-->
+<body class="impress-not-supported">
+<!--
+    This fallback message is only visible when there is `impress-not-supported` class on body.
+-->
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+<!--
+    This is the core element used by impress.js: the wrapper for your presentation steps. 
+    In this element all the impress.js magic happens.
+    
+    data-transition-duration sets the time in microseconds that is used for the
+    animation when transtitioning between slides.
+    
+    data-autoplay can be used to set the time in seconds, after which presentation
+    automatically moves to next slide. It can also be set individually for each
+    slide, but here we just set a common duration for all slides.
+-->
+<div id="impress" data-transition-duration="1000">
+
+    <!--
+        Each step of the presentation should be an element inside the `#impress` with a class name
+        of `step`. These step elements are positioned, rotated and scaled by impress.js, and
+        the 'camera' shows them on each step of the presentation.
+        
+        The `id` attribute of the step element is used to identify it in the URL, but it's optional.
+        If it is not defined, it will get a default value of `step-N` where N is a number of slide.
+        This step is auto-assigned the id "step-1". You can also use `#step-1` in a link, to 
+        point directly to this particular step.
+        
+        Positioning information is passed through data-* attributes.
+        
+        In the example below we only specify x and y position of the step element with `data-x="-1000"`
+        and `data-y="-1500"` attributes. This means that **the center** of the element (yes, the center)
+        will be positioned in point x = -1000px and y = -1500px of the presentation 'canvas'. It will not 
+        be rotated or scaled.
+        
+        The "step" class is what *must* be used for every "slide". In this example we also use the "slide"
+        class, which adds a rectangle with some background and makes this presentation look like a traditional
+        powerpoint slide show. The "slide" class is entirely optional and indeed you wouldn't use it for
+        your cooler impress.js presentations.
+    -->
+    <div class="step" data-x="-2000" data-y="0" data-rotate-"180">
+        <h1>See Mips Run</h1>
+        <h6>How Hardware and Software Work Together</h6>
+
+        <div class="notes">
+        Any element with the class="notes" will not be displayed. This can
+        be used for speaker notes. In fact, the impressConsole plugin will
+        show it in the speaker console!
+        </div>
+    </div>
+
+    <div class="step" data-x="0" data-y="0" data-rotate-"60">
+        <h3>How Hardware and Software Work Together</h3>
+        <ul>
+          <li class="substep"> The Life and Times of an Interrupt </li>
+          <li class="substep"> Threads, Critical Regions, and Atomicity </li>
+          <li class="substep"> What Happens on a System Call</li>
+        </ul>
+    </div>
+
+    <!--
+        This element introduces rotation.
+
+        Notation shouldn't be a surprise. We use `data-rotate="30"` attribute, meaning that this
+        element should be rotated by 30 degrees clockwise.        
+    -->
+    <div class="step" data-x="2000" data-y="0">
+      <h3>The Life and Times of an Interrupt</h3>
+      <font size="5">
+        <ul>
+          <li class="substep"> Tap a key on the keyboard</li>
+          <li class="substep"> Via various pieces of hardware outside the CPU</li>
+          <li class="substep"> Flips on the exception state bit <strong>SR(EXL)</strong></li>
+          <li class="substep"> Jump to general exception entry point, at<strong>0x8000.0180</strong></li>
+          <li class="substep"> The general exception handler inspects the <strong>Cause</strong> register to get Linux’s <strong>irq</strong> number</li>
+          <li class="substep"> The main exception handler saves all the integer register and some key CP0 register values include <strong>SR</strong>, <strong>EPC</strong>, and <strong>Cause</strong></li>
+          <li class="substep"> Clearing <strong>SR(EXL)</strong> but also clearing <strong>SR(IE)</strong> to avoid taking a second interrupt</li>
+          <li class="substep"> call <strong>do_IRQ()</strong></li>
+          <li class="substep"> Assuming there is a device <strong>ISR</strong> (interrupt service routine) registered on this irq number, <strong>do_IRQ()</strong> calls on to <strong>handle_IRQ_event()</strong></li>
+          <li class="substep"> Interrupt handlers are finished, <strong>handle_IRQ_event()</strong> disables interrupts again and returns</li>
+          <li class="substep"> After some more opportunity for machine-dependent tidying up, that calls ret from intr() to unwind the interrupt exception</li>
+        </ul>
+      </font>
+    </div>
+
+    <div class="step" data-x="4000" y="0">
+        <h3>The Life and Times of an Interrupt</h3>
+        <p> Linux traditionally splits the ISR into a <strong>top half</strong>, run at interrupt time, and a <strong>bottom half</strong>, deferred until after a rescheduling opportunity </p>
+
+        <ul>
+          <li class="substep"> softirq</li>
+          <li class="substep"> tasklet</li>
+          <li class="substep"> workqueue</li>
+        </ul>
+
+        <div class="notes">
+          分析和讲解更加多的关于linux 相关的内容
+        </div>
+    </div>
+
+    <div class="step" data-x="6000" data-y="0">
+        <h2>Threads, Critical Regions, and Atomicity</h2>
+        <p class="zoom-in zoom-out" style="transition-delay: 1s">Locks in Linux</p>
+        <p class="zoom-in zoom-out" style="transition-delay: 2s">Hardware support in MIPS</p>
+        <div class="notes">
+          分析linux 中间使用的lock 含有那些种类,　然
+        </div>
+    </div>
+
+    <div class="step" data-x="8000" data-y="0">
+      <h3>Locks in Linux</h3>
+        <ul>
+          <li class="substep">Semaphore</li>
+          <li class="substep">Mutex</li>
+          <li class="substep">SpinLock</li>
+        </ul>
+    </div>
+    
+   <div class="step" data-x="8000" data-y="0" data-z="-4000">
+        <h1>What's SMP</h1>
+        <img src="images/SMP.svg" 
+             alt="SMP" 
+             class="right"/>
+        <blockquote>
+          <font size="2">
+          Diagram of a symmetric multiprocessing system Symmetric multiprocessing (SMP) involves a multiprocessor computer hardware and software architecture where two or more identical processors are connected to a single, shared main memory, have full access to all input and output devices, and are controlled by a single operating system instance that treats all processors equally, reserving none for special purposes. Most multiprocessor systems today use an SMP architecture.
+          </font>
+        </blockquote>
+    </div>
+
+
+
+    <div class="step" data-x="8000" data-y="0" data-z="-8000">
+      <h3>Locks in Linux</h3>
+
+      <font size="6">
+        <table border="1">
+          <tr>
+            <th>Requirement</th>
+            <th>Recommended Lock</th>
+          </tr>
+   
+          <tr>
+            <td>Low overhead locking</td>
+            <td>Spin lock is preferred.</td>
+          </tr>
+
+          <tr>
+            <td>Short lock hold time</td>
+            <td>Spin lock is preferred.</td>
+          </tr>
+
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+
+          <tr>
+            <td>Long lock hold time</td>
+            <td>Mutex is preferred.</td>
+          </tr>
+
+          <tr>
+            <td>Need to lock from interrupt context</td>
+            <td>Spin lock is required.</td>
+          </tr>
+
+          <tr>
+            <td>Mutex is required</td>
+            <td>Need to sleep while holding lock</td>
+          </tr>
+        </table>
+      </font>
+    </div>
+
+
+    <div class="step" data-x="10000" data-y="0" data-z="0">
+      <h3>Hardware Support in Linux</h3>
+      <font size="5">
+        <ul>
+          <li>test-and-set</li>
+          <li>fetch-and-add</li>
+          <li>compare-and-swap</li>
+        </ul>
+
+        <pre><code>
+        // atomic_inc(&my_count) in Linux
+        atomic_inc:
+        ll v0, 0(a0) # a0 has pointer to ’mycount’
+        addu v0, 1
+        sc v0, 0(a0)
+        beq v0, zero, atomic_inc
+        nop
+        jr ra
+        nop
+        </code></pre>
+      </font>
+    </div>
+
+    <div class="step" data-x="12000" data-y="0" data-z="0">
+      <h3>What Happens on a System Call</h3>
+        <ul>
+          <li class="substep">Security</li>
+          <li class="substep">Stability</li>
+        <ul>
+    </div>
+
+    <div class="step" data-x="14000" data-y="0" data-z="0">
+      <h3>What Happens on a System Call</h3>
+        <ul>
+          <li>MIPS use <strong>syscall</strong> and X86 use <strong>int</strong></li>
+          <li>The syscall number is put in v0</li>
+          <li>Arguments are passed as required by the “o32” ABI.</li>
+          <li>The return value of the syscall is usually in v0</li>
+        <ul>
+    </div>
+
+    <script type="text/javascript">
+        var acmeDrawGraph = function() {
+            var profits = {};
+            
+            // Q1-Q2: get innerHTML, remove €
+            var value = document.getElementById('acme-q1').innerHTML;
+            if( value[value.length-1] == "€" ) value = value.substring(0, value.length-1);
+            profits['q1'] = value;
+            var value = document.getElementById('acme-q2').innerHTML;
+            if( value[value.length-1] == "€" ) value = value.substring(0, value.length-1);
+            profits['q2'] = value;
+            
+            // Q3-Q4: get input.value
+            profits['q3'] = document.getElementById('acme-q3').value;
+            profits['q4'] = document.getElementById('acme-q4').value;
+
+            // Convert all to numeric value, and remember max value for scaling purposes.
+            var max = profits['q1'];
+            for ( var q in profits ) {
+                profits[q] = isNaN(profits[q]) ? 0 : Number(profits[q]);
+                if( profits[q] > max ) {
+                    max = profits[q];
+                }
+            }
+            
+            // Draw the bar graph
+            for ( var q in profits ) {
+                var h = 200 * profits[q] / max;
+                var div = document.getElementById('acme-graph-'+q);
+                div.style = 'height: ' + h + 'px';
+            }
+        };
+        // This draws the first 2 bars during page load
+        acmeDrawGraph();
+    </script>
+
+    <!--
+        This step also sets a custom data-transition-duration. All of the above steps used the value set
+        in the root div#impress element, but it is also allowed to set it for each step. Since transitioning
+        to this step will rotate twice around it's axis, we give the transition a bit more time here.
+    -->
+    <!-- This last, empty "slide" is set to be very large using the data-scale attribute, 
+         so that it covers all the other slides you just saw. 
+         It's a common way of zooming out at the end, to show the whole presentation.
+         In CSS, we set pointer-events:none to make this slide non-clickable. 
+         It makes a difference at least for SVG content, such as the mermaid diagram. -->
+    <div id="overview" class="step" data-x="2000" data-y="0" data-scale="8" style="pointer-events: none;">
+    </div>
+</div>
+
+<!--
+    Add navigation-ui controls: back, forward and a select list.
+    Add a progress indicator bar (current step / all steps)
+    Add the help popup plugin
+-->
+<div id="impress-toolbar"></div>
+
+<div class="impress-progressbar"><div></div></div>
+<div class="impress-progress"></div>
+
+<div id="impress-help"></div>
+
+<!-- Extra modules
+     Load highlight.js, mermaid.js, markdown.js and MathJax.js from extras.
+     If you're curious about details, these are initialized in src/plugins/extras/extras.js -->
+<script type="text/javascript" src="../../extras/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="../../extras/mermaid/mermaid.min.js"></script>
+<script type="text/javascript" src="../../extras/markdown/markdown.js"></script>
+<script type="text/javascript" src="../../extras/mathjax/MathJax.js?config=TeX-AMS_CHTML"></script>
+<!--
+    To make all described above really work, you need to include impress.js in the page.
+    You also need to call a `impress().init()` function to initialize impress.js presentation.
+    And you should do it in the end of your document. 
+-->
+<script type="text/javascript" src="../../js/impress.js"></script>
+<script>impress().init();</script>
+
+</body>
+</html>
